@@ -70,4 +70,4 @@ popup.hide() // popup.isHidden = false
 popup.requestLayout() // relayout the popup content view
 ```
 # Demo
-`// TODO`
+![Suggestive Demo GIF](demo.gif)
