@@ -11,6 +11,7 @@ import android.view.animation.Transformation
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.PopupWindow
+import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
 
@@ -19,9 +20,16 @@ import androidx.recyclerview.widget.RecyclerView
  *
  * @property context the context
  * @property anchor the view to anchor to
+ * @property view the content view
+ * @property onQuery called when the text of [anchor] changes (if it's an [EditText])
  * @property backgroundDrawable the popup background drawable
- * @property preferredPosition the preferred popup position
+ * @property preferredPosition the preferred vertical popup position
+ * @property popupGravity determines the horizontal alignment of the popup with [anchor]
  * @property hideOnBlur if true the popup will hide itself when [anchor] loses focus
+ * @property constrainToAnchorBounds constrains the popup boundaries to the [anchor]'s boundaries if true
+ * @property minCharacters the minimum amount of characters required before invoking [onQuery]
+ * @property attachTextChangeListener attaches the text change listener that invokes [onQuery], [show] and [dismiss]
+ * @property onQueryThrottle the minimum delay in milliseconds between each [onQuery] invocation
  */
 open class SuggestionWindow(
     protected val context: Context,
@@ -30,8 +38,12 @@ open class SuggestionWindow(
     private val onQuery: (query: String) -> Unit,
     private val backgroundDrawable: Drawable,
     internal val preferredPosition: PreferredPosition,
+    internal val popupGravity: Int,
     private val hideOnBlur: Boolean,
-    internal val constrainWidthToAnchorBounds: Boolean
+    internal val constrainToAnchorBounds: Boolean,
+    private val minCharacters: Int,
+    private val attachTextChangeListener: Boolean,
+    private val onQueryThrottle: Long
 ) : PopupWindow(context) {
     enum class PreferredPosition {
         /**
@@ -69,6 +81,10 @@ open class SuggestionWindow(
         }
     }
 
+    private val onQueryRunnable = Runnable {
+        onQuery((anchor as? TextView)?.text.toString())
+    }
+
     init {
         if (hideOnBlur) {
             anchor.setOnFocusChangeListener { v, hasFocus ->
@@ -77,9 +93,21 @@ open class SuggestionWindow(
                 }
             }
         }
-        if (anchor is EditText) {
+        if (attachTextChangeListener && anchor is EditText) {
             anchor.addTextChangedListener(onTextChanged = { s: CharSequence?, _: Int, _: Int, _: Int ->
-                onQuery(s?.toString() ?: return@addTextChangedListener)
+                if (!s.isNullOrBlank() && s.length > minCharacters) {
+                    show()
+                    if (onQueryThrottle == 0L) {
+                        onQuery(s.toString())
+                    }
+                    else {
+                        anchor.removeCallbacks(onQueryRunnable)
+                        anchor.postDelayed(onQueryRunnable, onQueryThrottle)
+                    }
+                }
+                else if (s.isNullOrBlank() || s.isEmpty()) {
+                    hide()
+                }
             })
         }
         isOutsideTouchable = true

@@ -1,5 +1,6 @@
 package dev.xtr.suggestive
 
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import kotlin.math.max
@@ -65,7 +66,7 @@ internal fun SuggestionWindow.updateWindowRect() {
     measureWindowVisibleFrame()
     updateAnchorRect()
 
-    val availableWidth = if (constrainWidthToAnchorBounds) {
+    val availableWidth = if (constrainToAnchorBounds) {
         anchorRect.width()
     } else {
         windowVisibleFrame.width()
@@ -91,13 +92,40 @@ internal fun SuggestionWindow.updateWindowRect() {
         anchorRect.height()
     }
 
-    windowRect.left = if (constrainWidthToAnchorBounds) {
-        anchorRect.left
-    } else {
-        windowVisibleFrame.left
-    } + marginLeft
+    if (popupGravity xor Gravity.START == 0) {
+        windowRect.left = windowVisibleFrame.left
+        windowRect.right = windowRect.left + width
+    }
+    else if (popupGravity xor Gravity.END == 0) {
+        windowRect.right = anchorRect.right
+        windowRect.left = windowRect.right - width
+    }
+    else {
+        windowRect.left = anchorRect.centerX() - width / 2
+        windowRect.right = anchorRect.centerX() + width / 2
+    }
+
+    if (constrainToAnchorBounds) {
+        if (width > anchorRect.width()) {
+            windowRect.left = anchorRect.left
+            windowRect.right = anchorRect.right
+        }
+        else if (popupGravity xor Gravity.START == 0) {
+            windowRect.left = anchorRect.left
+            windowRect.right = anchorRect.left + width
+        }
+        else if (popupGravity xor Gravity.END == 0) {
+            windowRect.right = anchorRect.right
+            windowRect.left = anchorRect.right - width
+        }
+        else {
+            windowRect.left = anchorRect.centerX() - width / 2
+            windowRect.right = anchorRect.centerX() + width / 2
+        }
+    }
+    windowRect.left += marginLeft
+    windowRect.right -= marginRight
     windowRect.top = anchorRect.top + offsetY - marginBottom
-    windowRect.right = windowRect.left + width
     windowRect.bottom = windowRect.top + height
 }
 

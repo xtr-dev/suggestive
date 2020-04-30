@@ -5,11 +5,11 @@ package dev.xtr.suggestive
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.EditText
 import androidx.core.content.ContextCompat
-import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -20,55 +20,69 @@ object Suggestive {
     /**
      * Create a [SuggestionWindow] containing [view] anchored to [anchor].
      *
-     * @param anchor the anchor view
+     * @param anchor the view to anchor to
      * @param view the content view
-     * @return the popup window
+     * @param onQuery called when the text of [anchor] changes (if it's an [EditText])
+     * @param backgroundDrawable the popup background drawable
+     * @param preferredPosition the preferred popup position
+     * @param hideOnBlur if true the popup will hide itself when [anchor] loses focus
+     * @param constrainWidthToAnchorBounds constrains the popup width to the [anchor]'s boundaries if true
+     * @param minCharacters the minimum amount of characters required before invoking [onQuery]
+     * @param attachTextChangeListener attaches the text change listener that invokes [onQuery], [SuggestionWindow.show] and [SuggestionWindow.dismiss]
+     * @param onQueryThrottle the minimum delay in milliseconds between each [onQuery] invocation
      */
     fun view(anchor: View, view: View,
              onQuery: (query: String) -> Unit = {},
              backgroundDrawable: Drawable = ContextCompat.getDrawable(anchor.context, R.drawable.popup_rounded_bg)
                  ?: ColorDrawable(Color.WHITE),
+             gravity: Int = Gravity.CENTER,
              preferredPosition: SuggestionWindow.PreferredPosition = SuggestionWindow.PreferredPosition.BEST_FIT,
              hideOnBlur: Boolean = true,
-             constrainWidthToAnchorBounds: Boolean = true): SuggestionWindow {
-        val window = SuggestionWindow(
+             constrainWidthToAnchorBounds: Boolean = true,
+             minCharacters: Int = 0,
+             attachTextChangeListener: Boolean = true,
+             onQueryThrottle: Long = 0
+    ): SuggestionWindow {
+        return SuggestionWindow(
             anchor.context,
             anchor,
             view,
             onQuery,
             backgroundDrawable,
             preferredPosition,
+            gravity,
             hideOnBlur,
-            constrainWidthToAnchorBounds
+            constrainWidthToAnchorBounds,
+            minCharacters,
+            attachTextChangeListener,
+            onQueryThrottle
         )
-        if (anchor is TextView) {
-            anchor.addTextChangedListener(onTextChanged = { s: CharSequence?, _: Int, _: Int, _: Int ->
-                if (!s.isNullOrBlank()) {
-                    window.show()
-                }
-                else {
-                    window.hide()
-                }
-            })
-        }
-        return window
     }
 
     /**
      * Create a [SuggestionWindow] containing a [RecyclerView] with [adapter] anchored to [anchor].
      *
-     * @param anchor the anchor view
-     * @param adapter the recycler view adapter
-     * @param onQuery the query callback
+     * @param anchor the view to anchor to
+     * @param onQuery called when the text of [anchor] changes (if it's an [EditText])
+     * @param backgroundDrawable the popup background drawable
+     * @param preferredPosition the preferred popup position
+     * @param hideOnBlur if true the popup will hide itself when [anchor] loses focus
+     * @param constrainWidthToAnchorBounds constrains the popup width to the [anchor]'s boundaries if true
+     * @param minCharacters the minimum amount of characters required before invoking [onQuery]
+     * @param attachTextChangeListener attaches the text change listener that invokes [onQuery], [SuggestionWindow.show] and [SuggestionWindow.dismiss]
+     * @param onQueryThrottle the minimum delay in milliseconds between each [onQuery] invocation
      * @return the popup window
      */
     fun recycler(anchor: View, adapter: RecyclerView.Adapter<*>,
                  onQuery: (query: String) -> Unit = {},
-                 backgroundDrawable: Drawable = ContextCompat.getDrawable(anchor.context, R.drawable.popup_rounded_bg)
-                     ?: ColorDrawable(Color.WHITE),
+                 backgroundDrawable: Drawable = ContextCompat.getDrawable(anchor.context, R.drawable.popup_rounded_bg) ?: ColorDrawable(Color.WHITE),
+                 gravity: Int = Gravity.CENTER,
                  preferredPosition: SuggestionWindow.PreferredPosition = SuggestionWindow.PreferredPosition.BEST_FIT,
                  hideOnBlur: Boolean = true,
-                 constrainWidthToAnchorBounds: Boolean = true): SuggestionWindow {
+                 constrainWidthToAnchorBounds: Boolean = true,
+                 minCharacters: Int = 0,
+                 attachTextChangeListener: Boolean = true,
+                 onQueryThrottle: Long = 0): SuggestionWindow {
         val context = anchor.context
         val rv = RecyclerView(context)
         rv.layoutParams = ViewGroup.LayoutParams(
@@ -80,9 +94,13 @@ object Suggestive {
             rv,
             onQuery,
             backgroundDrawable,
+            gravity,
             preferredPosition,
             hideOnBlur,
-            constrainWidthToAnchorBounds
+            constrainWidthToAnchorBounds,
+            minCharacters,
+            attachTextChangeListener,
+            onQueryThrottle
         )
         rv.adapter = adapter
         adapter.registerAdapterDataObserver(SuggestionWindowAdapterDataObserver {
