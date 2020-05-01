@@ -1,7 +1,6 @@
 
 # Suggestive 🍌
 An Android UI library that allows easy implementation of (text) input suggestion [popup windows](https://developer.android.com/reference/android/widget/PopupWindow).
-
 - Implement filtering using the onQuery callback
 - Creates suggestion popups from RecyclerView adapters
 - Creates suggestion popups from any View
@@ -9,10 +8,9 @@ An Android UI library that allows easy implementation of (text) input suggestion
 - Automatically closes on back press if hosted in an AppCompatActivity
 
 # Sample
-**Create a suggestion popup from a recycler adapter**
 
-To create a popup window of a RecyclerView use `Suggestive.recycler()`,
-
+**Create a suggestion popup from a recycler adapter**  
+To create a popup window of a RecyclerView use `Suggestive.recycler()`.  
 All named arguments are optional and set to their default in this sample.
 ```kotlin
 // Create a suggestion popup containing a recycler view
@@ -58,15 +56,16 @@ Suggestive.recycler(
 })
 ```
 
-**Create a suggestion popup from a view**
-
+**Create a suggestion popup from a view**  
 To create a popup window of a view use `Suggestive.view()`, this method takes the same arguments as `recycler()`.
 ```kotlin
 val view: View = //...
 Suggestive.view(anchorView, view)
 ```
 
-**Manipulate the popup manually**
+**Manipulate the popup manually**  
+Both factory methods on the `Suggestive` object return instances of `SuggestionWindow`.  
+Use methods on this object to manipulate the popup manually:
 ```kotlin
 val popup = Suggestive.view(anchorView, view)
 popup.show() // popup.isHidden = true
@@ -74,4 +73,5 @@ popup.hide() // popup.isHidden = false
 popup.requestLayout() // relayout the popup content view
 ```
 # Demo
+See the demo gif below or try it out on `tbd`.  
 ![Suggestive Demo GIF](demo.gif)

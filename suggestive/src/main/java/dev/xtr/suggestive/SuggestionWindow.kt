@@ -20,7 +20,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 
-
 /**
  * A [PopupWindow] anchored to [anchor].
  */
