@@ -7,8 +7,26 @@ An Android UI library that allows easy implementation of (text) input suggestion
 - Works and animates well with soft keyboard visibility changes
 - Automatically closes on back press if hosted in an AppCompatActivity
 
-## Sample
+## Gradle
+Include repository in root build.gradle
+```
+allprojects {
+    repositories {
+        maven { 
+            url "https://dl.bintray.com/xtr-bas/Suggestive"
+        }
+    }
+}
+```
+Add dependency to app build.gradle
+```
+dependencies {
+    implementation 'dev.xtr.suggestive:suggestive:1.0.0'
+}
+```
 
+
+## Sample
 **Create a suggestion popup from a recycler adapter**  
 To create a popup window of a RecyclerView use `Suggestive.recycler()`.  
 All named arguments are optional and set to their default in this sample.
