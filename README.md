@@ -7,7 +7,7 @@ An Android UI library that allows easy implementation of (text) input suggestion
 - Works and animates well with soft keyboard visibility changes
 - Automatically closes on back press if hosted in an AppCompatActivity
 
-# Sample
+## Sample
 
 **Create a suggestion popup from a recycler adapter**  
 To create a popup window of a RecyclerView use `Suggestive.recycler()`.  
@@ -72,7 +72,7 @@ popup.show() // popup.isHidden = true
 popup.hide() // popup.isHidden = false
 popup.requestLayout() // relayout the popup content view
 ```
-# Demo
+## Demo
 See the demo gif below or try it out on `tbd`.
 
 ![Suggestive Demo GIF](demo.gif)
