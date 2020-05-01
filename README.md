@@ -73,5 +73,6 @@ popup.hide() // popup.isHidden = false
 popup.requestLayout() // relayout the popup content view
 ```
 # Demo
-See the demo gif below or try it out on `tbd`.  
+See the demo gif below or try it out on `tbd`.
+
 ![Suggestive Demo GIF](demo.gif)
