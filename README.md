@@ -6,6 +6,7 @@ Allows easy implementation of text input suggestion [popup windows](https://deve
 - Creates suggestion popups from RecyclerView adapters
 - Creates suggestion popups from any View
 - Works and animates well with soft keyboard visibility changes
+- Automatically closes on back press if hosted in an AppCompatActivity
 
 # Sample
 **Create a suggestion popup from a recycler adapter**
@@ -46,6 +47,9 @@ Suggestive.recycler(
     
     // show the popup above or below anchor based on available space around anchor
     preferredPosition = SuggestionWindow.PreferredPosition.BEST_FIT,
+    
+    // dismisses the popup when the back button is pressed
+    dismissOnBackPress = true,
     
     // the input query callback, called for every text change event on anchor
     //  (with exclusions as mandated by the minCharacters and onQueryThrottle options)

@@ -47,8 +47,10 @@ class MainActivity : AppCompatActivity() {
             hideOnBlur = true,
             // show the popup above or below anchor based on available space around anchor
             preferredPosition = SuggestionWindow.PreferredPosition.BEST_FIT,
+            // dismisses the popup when the back button is pressed
+            dismissOnBackPress = true,
             // the input query callback, called for every text change event on anchor
-            //  (with exclusions as mandated by the minCharacters and onQueryThrottle options)
+            //  (with exclusions as mandated by the minCharacters and onQueryThrottle options),
             onQuery = { query ->
             vm.search(query)
         })
