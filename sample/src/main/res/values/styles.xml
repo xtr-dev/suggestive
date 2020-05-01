@@ -2,11 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="NewApi">
     <!-- Base application theme. -->
-    <style name="Theme.App" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.App" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/purple500</item>
-        <item name="colorPrimaryDark">@color/purple700</item>
-        <item name="colorAccent">@color/teal200</item>
+        <item name="colorPrimary">@color/yellow500</item>
+        <item name="colorPrimaryDark">@color/yellow700</item>
+        <item name="colorAccent">@color/orange800</item>
+        <item name="colorOnPrimary">#a0000000</item>
+        <item name="android:statusBarColor">?attr/colorSurface</item>
+        <item name="android:windowLightStatusBar">true</item>
         <item name="popupMenuStyle">@style/Widget.MaterialComponents.PopupMenu</item>
         <item name="android:contextPopupMenuStyle">@style/Widget.MaterialComponents.PopupMenu.ContextMenu</item>
         <item name="actionOverflowMenuStyle">@style/Widget.MaterialComponents.PopupMenu.Overflow</item>

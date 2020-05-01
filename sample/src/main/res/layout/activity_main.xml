@@ -5,47 +5,78 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipToPadding="false"
     tools:context=".sample.MainActivity">
 
-    <Button
-        android:id="@+id/startButton"
+    <TextView
+        android:id="@+id/suggestiveTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/centerButton"
-        android:layout_margin="32dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Suggestive 🍌"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"/>
+
+    <TextView
+        android:id="@+id/suggestiveSubTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/suggestiveTextView"
+        android:text="Allows easy implementation of text input suggestion popup windows."
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/gravityTextInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Gravity start"/>
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="64dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/suggestiveSubTitleTextView">
+
+        <AutoCompleteTextView
+            android:id="@+id/gravitySpinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:maxLines="1"
+            android:hint="Choose gravity..."/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/constrainBoundsCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gravityTextInputLayout"
+        android:text="Constrain popup to anchor bounds"/>
 
     <Button
-        android:id="@+id/centerButton"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/endButton"
-        android:layout_margin="32dp"
-        android:layout_width="match_parent"
+        android:id="@+id/applyButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Gravity center"/>
-
-    <Button
-        android:id="@+id/endButton"
+        android:layout_marginStart="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/queryDropdown"
-        android:layout_margin="32dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Gravity end"/>
+        app:layout_constraintTop_toBottomOf="@+id/constrainBoundsCheckBox"
+        android:text="Apply settings"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/queryDropdown"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias=".7"
-        android:layout_margin="32dp"
+        app:layout_constraintTop_toBottomOf="@+id/applyButton"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="64dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -55,8 +86,19 @@
             android:dropDownHorizontalOffset="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter a search query..."/>
+            android:maxLines="1"
+            android:hint="Search for 'Banana'..."/>
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/queryDropdown"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:text="Data from iTunes Search"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

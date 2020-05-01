@@ -2,6 +2,7 @@ package dev.xtr.suggestivetext.sample
 
 import android.os.Bundle
 import android.view.Gravity
+import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
         val background = ContextCompat.getDrawable(this, R.drawable.popup_rounded_bg)
             ?: return
-        Suggestive.recycler(
+        val suggestive = Suggestive.recycler(
             // anchor to queryEditText
             queryEditText,
             // use the rv adapter
@@ -52,5 +53,24 @@ class MainActivity : AppCompatActivity() {
             vm.search(query)
         })
 
+        gravitySpinner.setAdapter(
+            ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, arrayOf(
+                "Start",
+                "Center",
+                "End"
+            ))
+        )
+        gravitySpinner.setText("Center", false)
+
+        applyButton.setOnClickListener {
+            suggestive.hide()
+            queryEditText.setText("")
+            suggestive.popupGravity = when (gravitySpinner.text.toString()) {
+                "Start" -> Gravity.START
+                "End" -> Gravity.END
+                else -> Gravity.CENTER
+            }
+            suggestive.constrainToAnchorBounds = constrainBoundsCheckBox.isChecked
+        }
     }
 }

@@ -9,6 +9,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,6 +31,7 @@ object Suggestive {
      * @param minCharacters the minimum amount of characters required before invoking [onQuery]
      * @param attachTextChangeListener attaches the text change listener that invokes [onQuery], [SuggestionWindow.show] and [SuggestionWindow.dismiss]
      * @param onQueryThrottle the minimum delay in milliseconds between each [onQuery] invocation
+     * @param dismissOnBackPress dismisses the popup when the back button is pressed (context needs to extend [AppCompatActivity])
      */
     fun view(anchor: View, view: View,
              onQuery: (query: String) -> Unit = {},
@@ -41,7 +43,8 @@ object Suggestive {
              constrainWidthToAnchorBounds: Boolean = true,
              minCharacters: Int = 0,
              attachTextChangeListener: Boolean = true,
-             onQueryThrottle: Long = 0
+             onQueryThrottle: Long = 0,
+             dismissOnBackPress: Boolean = true
     ): SuggestionWindow {
         return SuggestionWindow(
             anchor.context,
@@ -55,7 +58,8 @@ object Suggestive {
             constrainWidthToAnchorBounds,
             minCharacters,
             attachTextChangeListener,
-            onQueryThrottle
+            onQueryThrottle,
+            dismissOnBackPress
         )
     }
 
@@ -71,6 +75,7 @@ object Suggestive {
      * @param minCharacters the minimum amount of characters required before invoking [onQuery]
      * @param attachTextChangeListener attaches the text change listener that invokes [onQuery], [SuggestionWindow.show] and [SuggestionWindow.dismiss]
      * @param onQueryThrottle the minimum delay in milliseconds between each [onQuery] invocation
+     * @param dismissOnBackPress dismisses the popup when the back button is pressed (context needs to extend [AppCompatActivity])
      * @return the popup window
      */
     fun recycler(anchor: View, adapter: RecyclerView.Adapter<*>,
@@ -82,11 +87,12 @@ object Suggestive {
                  constrainWidthToAnchorBounds: Boolean = true,
                  minCharacters: Int = 0,
                  attachTextChangeListener: Boolean = true,
-                 onQueryThrottle: Long = 0): SuggestionWindow {
+                 onQueryThrottle: Long = 0,
+                 dismissOnBackPress: Boolean = true): SuggestionWindow {
         val context = anchor.context
         val rv = RecyclerView(context)
         rv.layoutParams = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
         val window = view(
@@ -100,7 +106,8 @@ object Suggestive {
             constrainWidthToAnchorBounds,
             minCharacters,
             attachTextChangeListener,
-            onQueryThrottle
+            onQueryThrottle,
+            dismissOnBackPress
         )
         rv.adapter = adapter
         adapter.registerAdapterDataObserver(SuggestionWindowAdapterDataObserver {

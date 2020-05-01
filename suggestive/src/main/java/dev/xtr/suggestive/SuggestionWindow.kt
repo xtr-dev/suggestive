@@ -1,50 +1,30 @@
-@file:Suppress("MemberVisibilityCanBePrivate")
+@file:Suppress("MemberVisibilityCanBePrivate", "ConvertSecondaryConstructorToPrimary")
 
 package dev.xtr.suggestive
 
+import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
-import android.view.*
+import android.view.Gravity
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Transformation
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
-import androidx.recyclerview.widget.RecyclerView
+
 
 /**
- * An [EditText] suggestion [PopupWindow] based on [RecyclerView].
- *
- * @property context the context
- * @property anchor the view to anchor to
- * @property view the content view
- * @property onQuery called when the text of [anchor] changes (if it's an [EditText])
- * @property backgroundDrawable the popup background drawable
- * @property preferredPosition the preferred vertical popup position
- * @property popupGravity determines the horizontal alignment of the popup with [anchor]
- * @property hideOnBlur if true the popup will hide itself when [anchor] loses focus
- * @property constrainToAnchorBounds constrains the popup boundaries to the [anchor]'s boundaries if true
- * @property minCharacters the minimum amount of characters required before invoking [onQuery]
- * @property attachTextChangeListener attaches the text change listener that invokes [onQuery], [show] and [dismiss]
- * @property onQueryThrottle the minimum delay in milliseconds between each [onQuery] invocation
+ * A [PopupWindow] anchored to [anchor].
  */
-open class SuggestionWindow(
-    protected val context: Context,
-    internal val anchor: View,
-    internal val view: View,
-    private val onQuery: (query: String) -> Unit,
-    private val backgroundDrawable: Drawable,
-    internal val preferredPosition: PreferredPosition,
-    internal val popupGravity: Int,
-    private val hideOnBlur: Boolean,
-    internal val constrainToAnchorBounds: Boolean,
-    private val minCharacters: Int,
-    private val attachTextChangeListener: Boolean,
-    private val onQueryThrottle: Long
-) : PopupWindow(context) {
+open class SuggestionWindow : PopupWindow {
     enum class PreferredPosition {
         /**
          * Always show the popup above the anchor.
@@ -81,11 +61,68 @@ open class SuggestionWindow(
         }
     }
 
-    private val onQueryRunnable = Runnable {
-        onQuery((anchor as? TextView)?.text.toString())
-    }
+    private var dismissOnBackPress: Boolean
+    protected val context: Context
+    internal val anchor: View
+    var view: View
+    var onQuery: (query: String) -> Unit
+    val backgroundDrawable: Drawable
+    var preferredPosition: PreferredPosition
+    var popupGravity: Int
+    var hideOnBlur: Boolean
+    var constrainToAnchorBounds: Boolean
+    var minCharacters: Int
+    private val onQueryThrottle: Long
+    private val onQueryRunnable: Runnable
 
-    init {
+    /**
+     * Creates a [SuggestionWindow].
+     *
+     * @param context the context
+     * @param anchor the view to anchor to
+     * @param view the content view
+     * @param onQuery called when the text of [anchor] changes (if it's an [EditText])
+     * @param backgroundDrawable the popup background drawable
+     * @param preferredPosition the preferred vertical popup position
+     * @param popupGravity determines the horizontal alignment of the popup with [anchor]
+     * @param hideOnBlur if true the popup will hide itself when [anchor] loses focus
+     * @param constrainToAnchorBounds constrains the popup boundaries to the [anchor]'s boundaries if true
+     * @param minCharacters the minimum amount of characters required before invoking [onQuery]
+     * @param attachTextChangeListener attaches the text change listener that invokes [onQuery], [show] and [dismiss]
+     * @param onQueryThrottle the minimum delay in milliseconds between each [onQuery] invocation
+     * @param dismissOnBackPress dismisses the popup when the back button is pressed (context needs to extend [AppCompatActivity])
+     */
+    constructor(
+                context: Context,
+                anchor: View,
+                view: View,
+                onQuery: (query: String) -> Unit,
+                backgroundDrawable: Drawable,
+                preferredPosition: PreferredPosition,
+                popupGravity: Int,
+                hideOnBlur: Boolean,
+                constrainToAnchorBounds: Boolean,
+                minCharacters: Int,
+                attachTextChangeListener: Boolean,
+                onQueryThrottle: Long,
+                dismissOnBackPress: Boolean
+    ) {
+        this.context = context
+        this.anchor = anchor
+        this.view = view
+        this.onQuery = onQuery
+        this.backgroundDrawable = backgroundDrawable
+        this.preferredPosition = preferredPosition
+        this.popupGravity = popupGravity
+        this.hideOnBlur = hideOnBlur
+        this.constrainToAnchorBounds = constrainToAnchorBounds
+        this.minCharacters = minCharacters
+        this.onQueryThrottle = onQueryThrottle
+        this.dismissOnBackPress = dismissOnBackPress
+        onQueryRunnable = Runnable {
+            onQuery((anchor as? TextView)?.text.toString())
+        }
+
         if (hideOnBlur) {
             anchor.setOnFocusChangeListener { v, hasFocus ->
                 if (!hasFocus && isShowing) {
@@ -111,6 +148,23 @@ open class SuggestionWindow(
             })
         }
         isOutsideTouchable = true
+
+        if(dismissOnBackPress) {
+            val viewActivity = view.activity as AppCompatActivity?
+            viewActivity?.onBackPressedDispatcher?.addCallback(viewActivity, onBackPressedCallback)
+        }
+    }
+
+    private val View.activity: Activity?
+        get() {
+        var context: Context? = this.context
+        while (context is ContextWrapper) {
+            if (context is Activity) {
+                return context
+            }
+            context = context.baseContext
+        }
+        return null
     }
 
     /**
@@ -176,6 +230,16 @@ open class SuggestionWindow(
      */
     internal var determinedPosition: PreferredPosition = PreferredPosition.ABOVE
 
+    private val onBackPressedCallback = object :
+        OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if (isShowing) {
+                dismiss()
+                isEnabled = false
+            }
+        }
+    }
+
     /**
      * Update the positioning and size of the popup.
      */
@@ -197,6 +261,7 @@ open class SuggestionWindow(
         if (isShowing) {
             return
         }
+        onBackPressedCallback.isEnabled = true
 
         setBackgroundDrawable(backgroundDrawable)
         elevation = 8f
@@ -240,7 +305,9 @@ open class SuggestionWindow(
     }
 
     override fun dismiss() {
-        (contentView.parent as View).clearAnimation()
+        if (isShowing) {
+            (contentView.parent as View).clearAnimation()
+        }
         super.dismiss()
     }
 

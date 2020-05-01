@@ -3,11 +3,15 @@ package dev.xtr.suggestivetext.sample
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.withStyledAttributes
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import dev.xtr.suggestivetext.R
 import dev.xtr.suggestivetext.sample.api.SearchResult
 
 class MainAdapter : ListAdapter<SearchResult, MainAdapter.VH>(callback) {
@@ -24,19 +28,18 @@ class MainAdapter : ListAdapter<SearchResult, MainAdapter.VH>(callback) {
     }
 
     class VH(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val text1: TextView = itemView.findViewById<TextView>(android.R.id.text1)
-        val text2: TextView = itemView.findViewById<TextView>(android.R.id.text2)
+        val text1: TextView = itemView.findViewById(android.R.id.text1)
+        val text2: TextView = itemView.findViewById(android.R.id.text2)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        return VH(
-            LayoutInflater.from(
-                parent.context
-            ).inflate(android.R.layout.simple_list_item_2, parent, false)
-        )
+        return VH(LayoutInflater.from(parent.context).inflate(R.layout.suggestive_item, parent, false))
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
+        holder.itemView.updateLayoutParams {
+            width = ViewGroup.LayoutParams.WRAP_CONTENT
+        }
         holder.run {
             text1.text = currentList[position].artistName
             text2.text = currentList[position].trackName

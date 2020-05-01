@@ -92,39 +92,38 @@ internal fun SuggestionWindow.updateWindowRect() {
         anchorRect.height()
     }
 
-    if (popupGravity xor Gravity.START == 0) {
-        windowRect.left = windowVisibleFrame.left
-        windowRect.right = windowRect.left + width
-    }
-    else if (popupGravity xor Gravity.END == 0) {
-        windowRect.right = anchorRect.right
-        windowRect.left = windowRect.right - width
-    }
-    else {
-        windowRect.left = anchorRect.centerX() - width / 2
-        windowRect.right = anchorRect.centerX() + width / 2
-    }
-
     if (constrainToAnchorBounds) {
-        if (width > anchorRect.width()) {
+        if (marginLeft + marginRight + width > anchorRect.width()) {
             windowRect.left = anchorRect.left
             windowRect.right = anchorRect.right
         }
         else if (popupGravity xor Gravity.START == 0) {
-            windowRect.left = anchorRect.left
+            windowRect.left = anchorRect.left + marginLeft
             windowRect.right = anchorRect.left + width
         }
         else if (popupGravity xor Gravity.END == 0) {
-            windowRect.right = anchorRect.right
+            windowRect.right = anchorRect.right - marginRight
             windowRect.left = anchorRect.right - width
         }
         else {
-            windowRect.left = anchorRect.centerX() - width / 2
-            windowRect.right = anchorRect.centerX() + width / 2
+            windowRect.left = anchorRect.centerX() - width / 2 + marginLeft
+            windowRect.right = anchorRect.centerX() + width / 2 - marginRight
         }
     }
-    windowRect.left += marginLeft
-    windowRect.right -= marginRight
+    else {
+        if (popupGravity xor Gravity.START == 0) {
+            windowRect.left = windowVisibleFrame.left + marginLeft
+            windowRect.right = windowRect.left + width
+        }
+        else if (popupGravity xor Gravity.END == 0) {
+            windowRect.right = windowVisibleFrame.right - marginRight
+            windowRect.left = windowRect.right - width
+        }
+        else {
+            windowRect.left = windowVisibleFrame.centerX() - width / 2 + marginLeft
+            windowRect.right = windowVisibleFrame.centerX() + width / 2 - marginRight
+        }
+    }
     windowRect.top = anchorRect.top + offsetY - marginBottom
     windowRect.bottom = windowRect.top + height
 }
