@@ -73,6 +73,7 @@ popup.hide() // popup.isHidden = false
 popup.requestLayout() // relayout the popup content view
 ```
 ## Demo
-See the demo gif below or try it out on `tbd`.
+See the demo gif below or try it out on Google Play:  
+[<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" width="200"/>](https://play.google.com/store/apps/details?id=dev.xtr.suggestivetext&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1)
 
 ![Suggestive Demo GIF](demo.gif)
