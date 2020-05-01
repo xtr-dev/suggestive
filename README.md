@@ -1,6 +1,6 @@
 
 # Suggestive 🍌
-Allows easy implementation of text input suggestion [popup windows](https://developer.android.com/reference/android/widget/PopupWindow).
+An Android UI library that allows easy implementation of (text) input suggestion [popup windows](https://developer.android.com/reference/android/widget/PopupWindow).
 
 - Implement filtering using the onQuery callback
 - Creates suggestion popups from RecyclerView adapters
