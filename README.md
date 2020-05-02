@@ -8,17 +8,17 @@ An Android UI library that allows easy implementation of (text) input suggestion
 - Automatically closes on back press if hosted in an AppCompatActivity
 
 ## Gradle
-Include repository in root build.gradle
+Include the Bintray JCenter repository in the root build.gradle:
 ```
 allprojects {
     repositories {
-        maven { 
-            url "https://dl.bintray.com/xtr-bas/Suggestive"
+        maven {
+            url  "https://jcenter.bintray.com"
         }
     }
 }
 ```
-Add dependency to app build.gradle
+Add the dependency to app build.gradle:
 ```
 dependencies {
     implementation 'dev.xtr.suggestive:suggestive:1.0.0'
