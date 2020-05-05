@@ -21,7 +21,7 @@ allprojects {
 Add the dependency to app build.gradle:
 ```
 dependencies {
-    implementation 'dev.xtr.suggestive:suggestive:1.0.0'
+    implementation 'dev.xtr.suggestive:suggestive:1.0.1'
 }
 ```
 
