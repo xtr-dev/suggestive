@@ -131,7 +131,7 @@ open class SuggestionWindow : PopupWindow {
         }
         if (attachTextChangeListener && anchor is EditText) {
             anchor.addTextChangedListener(onTextChanged = { s: CharSequence?, _: Int, _: Int, _: Int ->
-                if (!s.isNullOrBlank() && s.length > minCharacters) {
+                if (!s.isNullOrBlank() && s.length >= minCharacters) {
                     show()
                     if (onQueryThrottle == 0L) {
                         onQuery(s.toString())
