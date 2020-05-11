@@ -278,6 +278,7 @@ open class SuggestionWindow : PopupWindow {
         // First add an inset listener to receive the window's system insets
         //  to properly position the window with afterwards
         anchor.rootView.setOnApplyWindowInsetsListener { v, insets ->
+            anchor.rootView.setOnApplyWindowInsetsListener(null)
             stableInsets.set(
                 insets.stableInsetLeft,
                 insets.stableInsetTop,

@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'dev.xtr.suggestive'
-version = '1.0.1'
+version = '1.0.2'
 
 android {
     compileSdkVersion 29
@@ -16,8 +16,8 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 2
-        versionName version
+        versionCode 3
+        versionName project.version
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -65,7 +65,7 @@ bintray {
         repo = 'Suggestive'
         name = group
         version {
-            name = version
+            name = project.version
         }
         licenses = ['GPL-3.0']
         vcsUrl = 'https://github.com/xtr-dev/suggestive.git'
