@@ -67,6 +67,8 @@ object Suggestive {
      * Create a [SuggestionWindow] containing a [RecyclerView] with [adapter] anchored to [anchor].
      *
      * @param anchor the view to anchor to
+     * @param adapter the recycler view adapter
+     * @param layoutManager the recycler view layout manager
      * @param onQuery called when the text of [anchor] changes (if it's an [EditText])
      * @param backgroundDrawable the popup background drawable
      * @param preferredPosition the preferred popup position
@@ -78,7 +80,9 @@ object Suggestive {
      * @param dismissOnBackPress dismisses the popup when the back button is pressed (context needs to extend [AppCompatActivity])
      * @return the popup window
      */
-    fun recycler(anchor: View, adapter: RecyclerView.Adapter<*>,
+    fun recycler(anchor: View,
+                 adapter: RecyclerView.Adapter<*>,
+                 layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(anchor.context),
                  onQuery: (query: String) -> Unit = {},
                  backgroundDrawable: Drawable = ContextCompat.getDrawable(anchor.context, R.drawable.popup_rounded_bg) ?: ColorDrawable(Color.WHITE),
                  gravity: Int = Gravity.CENTER,
@@ -91,6 +95,7 @@ object Suggestive {
                  dismissOnBackPress: Boolean = true): SuggestionWindow {
         val context = anchor.context
         val rv = RecyclerView(context)
+        rv.layoutManager = layoutManager
         rv.layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
