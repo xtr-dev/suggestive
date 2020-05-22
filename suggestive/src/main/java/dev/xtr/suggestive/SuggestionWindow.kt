@@ -147,11 +147,6 @@ open class SuggestionWindow : PopupWindow {
             })
         }
         isOutsideTouchable = true
-
-        if(dismissOnBackPress) {
-            val viewActivity = view.activity as AppCompatActivity?
-            viewActivity?.onBackPressedDispatcher?.addCallback(viewActivity, onBackPressedCallback)
-        }
     }
 
     private val View.activity: Activity?
@@ -234,8 +229,8 @@ open class SuggestionWindow : PopupWindow {
         override fun handleOnBackPressed() {
             if (isShowing) {
                 dismiss()
-                isEnabled = false
             }
+            remove()
         }
     }
 
@@ -261,6 +256,11 @@ open class SuggestionWindow : PopupWindow {
             return
         }
         onBackPressedCallback.isEnabled = true
+
+        if(dismissOnBackPress) {
+            val viewActivity = view.activity as AppCompatActivity?
+            viewActivity?.onBackPressedDispatcher?.addCallback(viewActivity, onBackPressedCallback)
+        }
 
         setBackgroundDrawable(backgroundDrawable)
         elevation = 8f
