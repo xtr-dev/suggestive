@@ -21,7 +21,7 @@ allprojects {
 Add the dependency to app build.gradle:
 ```
 dependencies {
-    implementation 'dev.xtr.suggestive:suggestive:1.0.1'
+    implementation 'dev.xtr.suggestive:suggestive:1.0.3'
 }
 ```
 
@@ -95,3 +95,6 @@ See the demo gif below or try it out on Google Play:
 [<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" width="200"/>](https://play.google.com/store/apps/details?id=dev.xtr.suggestivetext&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1)
 
 ![Suggestive Demo GIF](demo.gif)
+
+## Used By
+[Stockfix - Notification Drawer Stock Monitor](https://play.google.com/store/apps/details?id=dev.xtr.stockfix)
