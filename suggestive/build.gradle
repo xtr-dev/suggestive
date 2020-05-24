@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'dev.xtr.suggestive'
-version = '1.0.4'
+version = '1.0.6'
 
 android {
     compileSdkVersion 29
@@ -16,7 +16,7 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 5
+        versionCode 6
         versionName project.version
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

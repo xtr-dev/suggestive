@@ -92,7 +92,8 @@ object Suggestive {
                  minCharacters: Int = 0,
                  attachTextChangeListener: Boolean = true,
                  onQueryThrottle: Long = 0,
-                 dismissOnBackPress: Boolean = true): SuggestionWindow {
+                 dismissOnBackPress: Boolean = true,
+                 setupRecyclerView: RecyclerView.() -> Unit = {}): SuggestionWindow {
         val context = anchor.context
         val rv = RecyclerView(context)
         rv.layoutManager = layoutManager
@@ -100,6 +101,7 @@ object Suggestive {
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
+        setupRecyclerView(rv)
         val window = view(
             anchor,
             rv,
